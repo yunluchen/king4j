@@ -1,0 +1,127 @@
+package net;
+
+option java_package = "k4j.net.prototype";
+
+option java_outer_classname = "NetMessageProtos";
+
+message PageRequest {
+
+    required uint32 request_id = 1;
+    optional uint32 user_id = 2;
+    optional AccountRequest account_request = 3;
+    optional FoodRequest food_request = 4;
+    optional NutritionRequest nutrition_request = 5;
+    optional HealthRequest health_request = 6;
+    optional DataRequest data_request = 7;
+
+}
+
+message PageResult {
+
+    optional AccountResult account_result = 1;
+    optional FoodResult food_result = 2;
+    optional NutritionResult nutrition_result = 3;
+    optional HealthResult health_result = 4;
+    optional DataResult data_result = 5;
+
+}
+
+message UintFloatPair {
+
+    required uint32 int_value = 1;
+    required float float_value = 2;
+
+}
+
+message Date {
+
+    required uint32 year = 1;
+    required uint32 month = 2;
+    required uint32 day = 3;
+
+}
+
+message AccountRequest {
+
+    required uint32 request_id = 1;
+    required bytes username = 2;
+    required bytes password = 3;
+    optional Date birthday = 4;
+    optional uint32 gender = 5;
+    optional uint32 labor_type = 6;
+    optional float height = 7;
+    optional float weight = 8;
+
+}
+
+message AccountResult {
+
+    required uint32 user_id = 1;
+    optional bytes error_message = 2;
+
+}
+
+message FoodRequest {
+
+    optional uint32 eater_num = 1;
+    optional uint32 cuisine_type = 2;
+    optional uint32 meal_type = 3;
+    repeated UintFloatPair exist_food = 4;
+    repeated uint32 prefer_food = 5 [packed = true];
+    repeated uint32 hate_food = 6 [packed = true];
+    repeated uint32 selected_dish = 7 [packed = true];
+
+}
+
+message FoodResult {
+
+    repeated UintFloatPair recipe = 1;
+
+}
+
+message NutritionRequest {
+
+    required uint32 request_id = 1;
+    repeated uint32 dish = 2 [packed = true];
+
+}
+
+message NutritionResult {
+
+    repeated float nutrition = 1 [packed = true];
+    repeated float recommend = 2 [packed = true];
+
+}
+
+message HealthRequest {
+
+    required uint32 request_id = 1;
+    required uint32 gender = 2;
+    required uint32 is_kid = 3;
+    repeated uint32 symptom = 4 [packed = true];
+
+}
+
+message HealthResult {
+
+    repeated UintFloatPair syndrome = 1;
+    optional bytes analyze = 2;
+    optional bytes recommend = 3;
+    optional uint32 symptom = 4;
+    optional bytes question = 5;
+
+}
+
+message DataRequest {
+
+    required uint32 request_id = 1;
+    optional bytes keyword = 2;
+    optional uint32 type = 3;
+
+}
+
+message DataResult {
+
+    repeated uint32 id = 1 [packed = true];
+
+}

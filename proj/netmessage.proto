@@ -1,0 +1,164 @@
+package net;
+
+option java_package = "com.king.net";
+option java_outer_classname = "NetMessageProtos";
+
+message PageRequest {	//所有网页的请求都用这个接口
+
+	required uint32 request_id = 1;	//请求类型，1：帐户操作 2：饮食推荐 3：营养计算 4：健康咨询 5：数据查询
+	
+	optional uint32 user_id = 2;	//用户id
+	
+	optional AccountRequest account_request = 3;	//帐户操作
+	
+	optional FoodRequest food_request = 4;	//饮食推荐
+	
+	optional NutritionRequest nutrition_request = 5;	//营养计算
+	
+	optional HealthRequest health_request = 6;	//健康咨询
+	
+	optional DataRequest data_request = 7;	//数据查询
+	
+}
+
+message PageResult {	//所有网页的返回都用这个接口
+
+	optional AccountResult account_result = 1;	//帐户操作
+
+	optional FoodResult food_result = 2;	//饮食推荐
+	
+	optional NutritionResult nutrition_result = 3;	//营养计算
+	
+	optional HealthResult health_result = 4;	//健康咨询
+	
+	optional DataResult data_result = 5;	//数据查询
+	
+}
+
+message UintFloatPair {
+
+	required uint32 int_value = 1;
+
+	required float float_value = 2;
+
+}
+
+message Date {
+	
+	required uint32 year = 1;
+	
+	required uint32 month = 2;
+	
+	required uint32 day = 3;
+	
+}
+
+message AccountRequest {	//注册、修改密码等账户操作的接口
+
+	required uint32 request_id = 1;	//请求类型，1：注册 2：登录 3：修改密码
+	
+	required bytes username = 2;	//用户名
+	
+	required bytes password = 3;	//加密后的密码，可以用RSA等加密
+	
+	optional Date birthday = 4;	//出生日期
+	
+	optional uint32 gender = 5;	//0: 男 1：女
+	
+	optional uint32 labor_type = 6;	//劳动强度，0-4：极轻、轻、中、重、极重
+
+	optional float height = 7;	//身高
+	
+	optional float weight = 8;	//体重
+	
+}
+
+message AccountResult {
+	
+	required uint32 user_id = 1;	//用户id
+	
+	optional bytes error_message = 2;	//错误文本
+	
+}
+
+message FoodRequest {
+
+	optional uint32 eater_num = 1;	//人数
+	
+	optional uint32 cuisine_type = 2;	//菜系
+	
+	optional uint32 meal_type = 3;	//按位从最后一位往前依次是：早餐、午餐、晚餐、下午茶、夜宵
+
+	repeated UintFloatPair exist_food = 4;	//已购食品，int：id float：数量
+
+	repeated uint32 prefer_food = 5 [packed = true];	//想吃的菜
+
+	repeated uint32 hate_food = 6 [packed = true];	//不想吃的菜
+
+	repeated uint32 selected_dish = 7 [packed = true];	//已选菜单，推荐页面点击重新选择时包含
+
+}
+
+message FoodResult {
+
+	repeated UintFloatPair recipe = 1;	//菜谱，int：id float：数量
+	
+}
+	
+message NutritionRequest {	//饮食记录页面点击分析或保存按钮
+
+	required uint32 request_id = 1;	//请求类型，1：分析 2：保存
+	
+	repeated uint32 dish = 2 [packed = true];	//今日菜单
+
+}
+
+message NutritionResult {
+	
+	repeated float nutrition = 1 [packed = true];	//营养够成
+	
+	repeated float recommend = 2 [packed = true];	//推荐营养够成
+
+}
+
+message HealthRequest {	//健康咨询页面点击分析或保存按钮，以及症状询问中点击确定
+
+	required uint32 request_id = 1;	//请求类型，1：分析 2：保存 3：确定
+	
+	required uint32 gender = 2;	//0: 男 1：女
+	
+	required uint32 is_kid = 3;	//0: 非儿童 1：儿童
+	
+	repeated uint32 symptom = 4 [packed = true];	//症状列表
+
+}
+
+message HealthResult {
+	
+	repeated UintFloatPair syndrome = 1;	//症列表，int：id float：概率
+	
+	optional bytes analyze = 2;	//分析
+	
+	optional bytes recommend = 3;	//建议
+
+	optional uint32 symptom = 4;	//询问的症状节点
+	
+	optional bytes question = 5;	//询问的问题
+	
+}
+
+message DataRequest {	//搜索食物等数据请求操作，是否在本地进行？
+
+	required uint32 request_id = 1;	//请求类型，1：食材 2：菜
+	
+	optional bytes keyword = 2;	//关键词
+	
+	optional uint32 type = 3;	//食材类型
+
+}
+
+message DataResult {
+
+	repeated uint32 id = 1 [packed = true];	//食材或菜的id
+
+}
